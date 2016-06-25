@@ -1,0 +1,47 @@
+// ----------------- Varriables ------------------//
+field-size = 100px
+
+
+
+// ----------------- Colors ---------------------//
+red1 = #d32f2f 
+red2 = #e53935 
+red3 = #e57373 
+
+
+//----------------- Global Styles ---------------//
+
+body
+	background-color red1
+
+*
+	font-family: 'Exo', sans-serif;
+	
+#wrapper
+	width 900px
+	max-width 90%
+	margin 0 auto
+	
+//----------------- Table Styles ---------------//
+.table 
+	transform translateY(50%)
+	padding 2px
+	width ( 3 * field-size )
+	margin 0 auto
+	display flex
+	.table-row
+		margin 0 auto
+		.table-field
+			position relative
+			text-align center
+			margin 2px
+			width field-size
+			height field-size
+			background red3
+			display inline-block
+			span 
+				display inline-block
+				position relative
+				top 50%
+				transform translateY(-50%)
+	
