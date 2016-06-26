@@ -1,0 +1,26 @@
+{
+  "name": "tic_tac_toe",
+  "version": "1.0.0",
+  "description": "SImple tic tac toe game",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "should": "^9.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/legendemil/tic_tac_toe.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/legendemil/tic_tac_toe/issues"
+  },
+  "homepage": "https://github.com/legendemil/tic_tac_toe#readme"
+}
