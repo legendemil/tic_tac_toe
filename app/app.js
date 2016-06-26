@@ -12,6 +12,11 @@ var game = (function() {
 		],
 		whoIsActive = 'PC';
 
+	var DOM = {
+		table: null,
+		tableFields: null,
+	}
+
 	function getUserFields(){
 		return userFields;
 	}
@@ -71,12 +76,17 @@ var game = (function() {
 		changePossibleWins(fieldId, whoIsActive);
 	}
 
-	function cacheDOM() {
+	function handleFieldClick(ev) {
+		console.log($(ev.target).data('field'));
+	}
 
+	function cacheDOM() {
+		DOM.table = $('.table');
+		DOM.tableFields = $(DOM.table).find('.table-field');
 	}
 
 	function bindEvents() {
-		
+		DOM.tableFields.on('click', handleFieldClick);
 	}
 	
 	function init() {

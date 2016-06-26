@@ -14,29 +14,28 @@ body {
       -ms-transform: translateY(50%);
           transform: translateY(50%);
   padding: 2px;
-  width: 300px;
+  width: 310px;
   margin: 0 auto;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
 }
 .table .table-row {
   margin: 0 auto;
 }
 .table .table-row .table-field {
+  box-sizing: border-box;
   position: relative;
   text-align: center;
-  margin: 2px;
   width: 100px;
   height: 100px;
   background: #e57373;
   display: inline-block;
-}
-.table .table-row .table-field span {
-  display: inline-block;
-  position: relative;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-          transform: translateY(-50%);
+  padding-top: 30px;
 }
