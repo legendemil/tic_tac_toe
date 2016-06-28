@@ -3,7 +3,7 @@ var game = (function() {
 		userFields = [],
 		pcFields = [],
 		possibleWins = generatePossibleWins(),
-		whoIsActive = 'USER',
+		whoIsActive = 'PC',
 		// x or o
 		userSign = 'x'
 		pcSign = 'o';
@@ -79,8 +79,10 @@ var game = (function() {
 		fields.splice(fields.indexOf(fieldId), 1);
 		changePossibleWins(fieldId, whoIsActive);
 		console.log(checkWin());
-		if(checkWin())
+		if(checkWin()) {
 			alert(whoIsActive + ' wins');
+			endGame();
+		}
 	}
 
 	function startPcMove() {
@@ -116,6 +118,23 @@ var game = (function() {
 		$field.text(sign);
 	}
 
+	function endGame(){
+		// reset game fields
+		fields = generateEmptyFields();
+		possibleWins = generatePossibleWins();
+		userFields = [];
+		pcFields = [];
+		console.log(possibleWins);
+		clearDOMFields();
+
+	}
+
+	function clearDOMFields(){
+		$.each(DOM.tableFields, function (index, field) {
+			$(field).text('');
+		});
+	}
+
 	function cacheDOM() {
 		DOM.table = $('.table');
 		DOM.tableFields = $(DOM.table).find('.table-field');
@@ -128,6 +147,7 @@ var game = (function() {
 	function init() {
 		cacheDOM();
 		bindEvents();
+		startPcMove();
 	}
 
 	init();

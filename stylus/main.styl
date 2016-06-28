@@ -29,18 +29,21 @@ body
 	width ( 3 * field-size + 10px)
 	margin 0 auto
 	display flex
-	flex-direction row
+	flex-direction column
 	flex-wrap wrap
 	.table-row
-		margin 0 auto
+		display flex
+		justify-content center
+		flex-direction row
+		box-sizing border-box	
 		.table-field
 			cursor pointer
 			box-sizing border-box
 			position relative
 			text-align center
-			width field-size
-			height field-size
+			min-width field-size
+			min-height field-size
 			background red3
 			display inline-block
 			padding-top 30px
-	
+			margin 2px

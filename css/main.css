@@ -19,24 +19,34 @@ body {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: row;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -webkit-flex-wrap: wrap;
       -ms-flex-wrap: wrap;
           flex-wrap: wrap;
 }
 .table .table-row {
-  margin: 0 auto;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  box-sizing: border-box;
 }
 .table .table-row .table-field {
   cursor: pointer;
   box-sizing: border-box;
   position: relative;
   text-align: center;
-  width: 100px;
-  height: 100px;
+  min-width: 100px;
+  min-height: 100px;
   background: #e57373;
   display: inline-block;
   padding-top: 30px;
+  margin: 2px;
 }
