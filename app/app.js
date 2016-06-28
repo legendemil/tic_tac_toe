@@ -1,16 +1,9 @@
 var game = (function() {
-	var fields = [1, 2, 3, 4, 5, 6, 7, 8, 9],
+	var fields = generateEmptyFields(),
 		userFields = [],
 		pcFields = [],
-		possibleWins = [
-			// left right
-			[1,2,3], [4,5,6], [7,8,9],
-			// top bottom
-			[1,4,7], [2,5,8], [3,6,9],
-			//cross
-			[1,5,9], [3,5,7]
-		],
-		whoIsActive = 'PC',
+		possibleWins = generatePossibleWins(),
+		whoIsActive = 'USER',
 		// x or o
 		userSign = 'x'
 		pcSign = 'o';
@@ -20,16 +13,24 @@ var game = (function() {
 		tableFields: null,
 	}
 
-	function getUserFields(){
-		return userFields;
+	function generateEmptyFields(howMany) {
+		var arr = [];
+		howMany = howMany || 9;
+		for(var i = 1; i <= howMany; i++)
+			arr.push(i);
+		return arr;
 	}
-
-	function getPcFields(){
-		return pcFields;
-	}
-
-	function getPossibleWins() {
-		return possibleWins;
+	
+	// return an array of possible wins
+	function generatePossibleWins() {
+		return  [
+			// left right
+			[1,2,3], [4,5,6], [7,8,9],
+			// top bottom
+			[1,4,7], [2,5,8], [3,6,9],
+			//cross
+			[1,5,9], [3,5,7]
+		];
 	}
 	
 	function checkIsEmpty(fieldId){
@@ -45,10 +46,9 @@ var game = (function() {
 		});
 	}
 
-	function checkWin(isUser) {
+	function checkWin() {
 		var isWinner = false;
 		var length = possibleWins.length;
-		whoIsActive = isUser ? 'USER' : 'PC';
 
 		for(var i = 0; i < length; i++) {
 			// if count will be 3 then somebody wins
@@ -66,8 +66,9 @@ var game = (function() {
 
 	function makeMove(fieldId, isUser) {
 		whoIsActive = isUser ? 'USER' : 'PC';
+		console.log('Now is turn: ', whoIsActive)
 		if(!checkIsEmpty(fieldId)) 
-			return false;
+			return;
 		
 		// add to user or pc fields
 		if(isUser) 
@@ -77,10 +78,20 @@ var game = (function() {
 		// remove from available fields
 		fields.splice(fields.indexOf(fieldId), 1);
 		changePossibleWins(fieldId, whoIsActive);
+		console.log(checkWin());
+		if(checkWin())
+			alert(whoIsActive + ' wins');
 	}
 
 	function startPcMove() {
-		
+		// get a ranom number
+		var id = Math.floor( Math.random() * fields.length );
+		var fieldId = fields[id];
+		var query = '.table-field[data-field="' + fieldId + '"]';
+		var $field = DOM.table.find(query);
+		makeMove(fieldId, false);
+		updateFieldsView($field);
+		changeUser('USER');
 	}
 
 	function changeUser(name) {
@@ -90,11 +101,19 @@ var game = (function() {
 	function handleFieldClick(ev) {
 		var $field = $(ev.target);
 		var fieldId = $field.data('field');
-		var sign = whoIsActive === 'USER' ? userSign : pcSign;	
+		// if field is already taken, break the function
+		if(!checkIsEmpty(fieldId))
+			return;
+
 		makeMove(fieldId, true);
-		$field.text(sign);
+		updateFieldsView($field);
 		changeUser('PC');
 		startPcMove();
+	}
+
+	function updateFieldsView($field) {
+		var sign = whoIsActive === 'USER' ? userSign : pcSign;	
+		$field.text(sign);
 	}
 
 	function cacheDOM() {
@@ -113,20 +132,5 @@ var game = (function() {
 
 	init();
 	
-	return {
-		checkIsEmpty: checkIsEmpty,
-		checkWin: checkWin,
-		getUserFields: getUserFields,
-		getPcFields: getPcFields,
-		getPossibleWins: getPossibleWins,
-		makeMove: makeMove,
-		changePossibleWins: changePossibleWins
-	}
-
 })();
 
-try {
-	module.exports = game;
-} catch(e) {
-	console.log('You dont have a module system bundler');
-}
