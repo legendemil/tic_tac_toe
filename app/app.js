@@ -10,7 +10,10 @@ var game = (function() {
 			//cross
 			[1,5,9], [3,5,7]
 		],
-		whoIsActive = 'PC';
+		whoIsActive = 'PC',
+		// x or o
+		userSign = 'x'
+		pcSign = 'o';
 
 	var DOM = {
 		table: null,
@@ -76,8 +79,22 @@ var game = (function() {
 		changePossibleWins(fieldId, whoIsActive);
 	}
 
+	function startPcMove() {
+		
+	}
+
+	function changeUser(name) {
+		whoIsActive = name;
+	}
+
 	function handleFieldClick(ev) {
-		console.log($(ev.target).data('field'));
+		var $field = $(ev.target);
+		var fieldId = $field.data('field');
+		var sign = whoIsActive === 'USER' ? userSign : pcSign;	
+		makeMove(fieldId, true);
+		$field.text(sign);
+		changeUser('PC');
+		startPcMove();
 	}
 
 	function cacheDOM() {

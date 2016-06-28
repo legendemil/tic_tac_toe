@@ -30,6 +30,7 @@ body {
   margin: 0 auto;
 }
 .table .table-row .table-field {
+  cursor: pointer;
   box-sizing: border-box;
   position: relative;
   text-align: center;
