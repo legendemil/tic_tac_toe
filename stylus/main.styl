@@ -1,5 +1,6 @@
 // ----------------- Varriables ------------------//
 field-size = 100px
+table-size = ( 3 * field-size + 10px)
 
 
 
@@ -21,12 +22,66 @@ body
 	width 900px
 	max-width 90%
 	margin 0 auto
+	position relative
+	
+
+//----------------- Table Styles ---------------//
+#choose-player-box
+	display none
+	position absolute
+	top -100px
+	left 50%
+	transform translateX(-50%)
+	background-color #fff
+	width table-size
+	padding-top .9rem
+	text-align center
+	color gray
+	div
+		display flex
+		justify-content space-around
+		button
+			border none
+			padding .4rem 0.9rem
+			font-size 1.5rem
+			background none
+			cursor pointer
+			transition-duration .3s
+			width 50%
+			&:hover
+				background-color rgba(red1, .8)
+				color #fff
+.show-choose-player-box
+	display block !important
+	animation-name show-choose-player-box
+	animation-duration .5s
+	animation-fill-mode forwards
+	
+@keyframes show-choose-player-box {
+	0% { } 
+	100%{
+		transform translateX(-50%) translateY(100%)
+	}
+}
+	
+.hide-choose-player-box
+	animation-name hide-choose-player-box
+	animation-duration .5s
+	animation-fill-mode forwards
+
+@keyframes hide-choose-player-box {
+	0% { } 
+	100%{
+		transform translateX(-50%) translateY(-100%)
+		opacity 0.1
+	}
+}
 	
 //----------------- Table Styles ---------------//
 .table 
 	transform translateY(50%)
 	padding 2px
-	width ( 3 * field-size + 10px)
+	width table-size
 	margin 0 auto
 	display flex
 	flex-direction column

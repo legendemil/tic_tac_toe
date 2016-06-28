@@ -1,16 +1,18 @@
 var game = (function() {
-	var fields = generateEmptyFields(),
-		userFields = [],
-		pcFields = [],
-		possibleWins = generatePossibleWins(),
-		whoIsActive = 'PC',
+	var fields 				= generateEmptyFields(),
+		userFields 			= [],
+		pcFields 			= [],
+		possibleWins 		= generatePossibleWins(),
+		whoIsActive 		= 'PC',
 		// x or o
-		userSign = 'x'
-		pcSign = 'o';
+		userSign 			= 'x'
+		pcSign 				= 'o',
+		isChoosedSign 		= false;
 
 	var DOM = {
-		table: null,
-		tableFields: null,
+		table: 				null,
+		tableFields: 		null,
+		choosePlayerBox: 	null
 	}
 
 	function generateEmptyFields(howMany) {
@@ -47,8 +49,8 @@ var game = (function() {
 	}
 
 	function checkWin() {
-		var isWinner = false;
-		var length = possibleWins.length;
+		var isWinner 	= false;
+		var length 		= possibleWins.length;
 
 		for(var i = 0; i < length; i++) {
 			// if count will be 3 then somebody wins
@@ -73,7 +75,7 @@ var game = (function() {
 	function makeMove(fieldId, isUser) {
 		whoIsActive = isUser ? 'USER' : 'PC';
 		if(!checkIsEmpty(fieldId)) 
-			return;
+			return -1;
 		
 		// add to user or pc fields
 		if(isUser) 
@@ -87,23 +89,29 @@ var game = (function() {
 		if(checkWin()) {
 			alert(whoIsActive + ' wins');
 			endGame();
-			return;
+			return 1;
 		}
 		if(checkDraw()) {
 			alert('Draw');
 			endGame();
+			return 0;
 		}
+		return 2;
 	}
 
 	function startPcMove() {
 		// get a ranom number
-		var id = Math.floor( Math.random() * fields.length );
-		var fieldId = fields[id];
-		var query = '.table-field[data-field="' + fieldId + '"]';
-		var $field = DOM.table.find(query);
+		var id 			= Math.floor( Math.random() * fields.length );
+		var fieldId 	= fields[id];
+		var query 		= '.table-field[data-field="' + fieldId + '"]';
+		var $field 		= DOM.table.find(query);
+		var moveResult;
+
 		updateFieldsView($field);
-		makeMove(fieldId, false);	
-		changeUser('USER');
+		moveResult 		= makeMove(fieldId, false);	
+		
+		if(moveResult === 2)
+			changeUser('USER');
 	}
 
 	function changeUser(name) {
@@ -111,32 +119,71 @@ var game = (function() {
 	}
 
 	function handleFieldClick(ev) {
-		var $field = $(ev.target);
-		var fieldId = $field.data('field');
+		if(!isChoosedSign)
+			return;
+
+		var $field 		= $(ev.target);
+		var fieldId 	= $field.data('field');
+		var moveResult;
 		// if field is already taken, break the function
 		if(!checkIsEmpty(fieldId))
 			return;
 
 		updateFieldsView($field);
-		makeMove(fieldId, true);
-		changeUser('PC');
+		moveResult = makeMove(fieldId, true);
+		if(moveResult === 2) {
+			changeUser('PC');
+			startPcMove();
+		}
+		
+	}
+
+	function handleChooseSign(ev) {
+		var btn = ev.target;
+		switch(btn.value) {
+			case 'x':
+				userSign 	= 'x';
+				pcSign 		= 'o';
+				break;
+			case 'o':
+				userSign 	= 'o';
+				pcSign 		= 'x';
+				break;
+		}
+		
+		isChoosedSign 		= true;
 		startPcMove();
+		DOM.choosePlayerBox.addClass('hide-choose-player-box');
+
+		setTimeout(function() {
+			DOM.choosePlayerBox.removeClass('show-choose-player-box');
+		}, 600);
+		
+	}
+
+	function showChooseBox() {
+		DOM.choosePlayerBox.addClass('show-choose-player-box');
+		setTimeout(function() {
+			DOM.choosePlayerBox.removeClass('hide-choose-player-box');
+		}, 600);
 	}
 
 	function updateFieldsView($field) {
-		var sign = whoIsActive === 'USER' ? userSign : pcSign;	
+		var sign 			= whoIsActive === 'USER' ? userSign : pcSign;	
 		$field.text(sign);
 	}
 
 	function endGame(){
 		// reset game fields
-		fields = generateEmptyFields();
-		possibleWins = generatePossibleWins();
-		userFields = [];
-		pcFields = [];
+		fields 				= generateEmptyFields();
+		possibleWins 		= generatePossibleWins();
+		userFields 			= [];
+		pcFields 			= [];
+		isChoosedSign 		= false;
+		
 		clearDOMFields();
 		changeUser('PC');
-
+		showChooseBox();
 	}
 
 	function clearDOMFields(){
@@ -146,18 +193,20 @@ var game = (function() {
 	}
 
 	function cacheDOM() {
-		DOM.table = $('.table');
-		DOM.tableFields = $(DOM.table).find('.table-field');
+		DOM.table 				= $('.table');
+		DOM.tableFields 		= $(DOM.table).find('.table-field');
+		DOM.choosePlayerBox 	= $('#choose-player-box');
 	}
 
 	function bindEvents() {
 		DOM.tableFields.on('click', handleFieldClick);
+		$(DOM.choosePlayerBox).find('button').on('click', handleChooseSign);
 	}
 	
 	function init() {
 		cacheDOM();
 		bindEvents();
-		startPcMove();
+		showChooseBox();
 	}
 
 	init();
