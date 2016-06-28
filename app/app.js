@@ -64,9 +64,14 @@ var game = (function() {
 		return isWinner;
 	}
 
+	function checkDraw() {
+		if(!fields.length)
+			return true;
+		return false;
+	}
+
 	function makeMove(fieldId, isUser) {
 		whoIsActive = isUser ? 'USER' : 'PC';
-		console.log('Now is turn: ', whoIsActive)
 		if(!checkIsEmpty(fieldId)) 
 			return;
 		
@@ -75,12 +80,17 @@ var game = (function() {
 			userFields.push(fieldId);
 		else
 			pcFields.push(fieldId);
+
 		// remove from available fields
 		fields.splice(fields.indexOf(fieldId), 1);
 		changePossibleWins(fieldId, whoIsActive);
-		console.log(checkWin());
 		if(checkWin()) {
 			alert(whoIsActive + ' wins');
+			endGame();
+			return;
+		}
+		if(checkDraw()) {
+			alert('Draw');
 			endGame();
 		}
 	}
@@ -91,8 +101,8 @@ var game = (function() {
 		var fieldId = fields[id];
 		var query = '.table-field[data-field="' + fieldId + '"]';
 		var $field = DOM.table.find(query);
-		makeMove(fieldId, false);
 		updateFieldsView($field);
+		makeMove(fieldId, false);	
 		changeUser('USER');
 	}
 
@@ -107,8 +117,8 @@ var game = (function() {
 		if(!checkIsEmpty(fieldId))
 			return;
 
-		makeMove(fieldId, true);
 		updateFieldsView($field);
+		makeMove(fieldId, true);
 		changeUser('PC');
 		startPcMove();
 	}
@@ -124,8 +134,8 @@ var game = (function() {
 		possibleWins = generatePossibleWins();
 		userFields = [];
 		pcFields = [];
-		console.log(possibleWins);
 		clearDOMFields();
+		changeUser('PC');
 
 	}
 
