@@ -10,9 +10,10 @@ var game = (function() {
 		isChoosedSign 		= false;
 
 	var DOM = {
-		table: 				null,
-		tableFields: 		null,
-		choosePlayerBox: 	null
+		table 				: null,
+		tableFields 		: null,
+		choosePlayerBox 	: null,
+		winnerBox 			: null
 	}
 
 	function generateEmptyFields(howMany) {
@@ -87,13 +88,11 @@ var game = (function() {
 		fields.splice(fields.indexOf(fieldId), 1);
 		changePossibleWins(fieldId, whoIsActive);
 		if(checkWin()) {
-			alert(whoIsActive + ' wins');
 			endGame();
 			return 1;
 		}
 		if(checkDraw()) {
-			alert('Draw');
-			endGame();
+			endGame(true);
 			return 0;
 		}
 		return 2;
@@ -161,6 +160,17 @@ var game = (function() {
 		
 	}
 
+	function handleRestartGame(ev) {
+		DOM.winnerBox.addClass('hide-winner-box');
+		setTimeout(function () {
+			DOM.winnerBox.removeClass('hide-winner-box show-winner-box');
+		}, 1000);
+
+		clearDOMFields();
+		changeUser('PC');
+		showChooseBox();
+	}
+
 	function showChooseBox() {
 		DOM.choosePlayerBox.addClass('show-choose-player-box');
 		setTimeout(function() {
@@ -173,7 +183,14 @@ var game = (function() {
 		$field.text(sign);
 	}
 
-	function endGame(){
+	function showWinnerBox(isDraw) {
+		var winsText 		= isDraw ? 'Nobody wins. Draw!' : whoIsActive + ' wins a game!';
+
+		DOM.winnerBox.find('h1').text(winsText);
+		DOM.winnerBox.addClass('show-winner-box');
+	}
+
+	function endGame(isDraw){
 		// reset game fields
 		fields 				= generateEmptyFields();
 		possibleWins 		= generatePossibleWins();
@@ -181,9 +198,7 @@ var game = (function() {
 		pcFields 			= [];
 		isChoosedSign 		= false;
 		
-		clearDOMFields();
-		changeUser('PC');
-		showChooseBox();
+		showWinnerBox(isDraw);
 	}
 
 	function clearDOMFields(){
@@ -196,11 +211,13 @@ var game = (function() {
 		DOM.table 				= $('.table');
 		DOM.tableFields 		= $(DOM.table).find('.table-field');
 		DOM.choosePlayerBox 	= $('#choose-player-box');
+		DOM.winnerBox 			= $('#winner-box');
 	}
 
 	function bindEvents() {
 		DOM.tableFields.on('click', handleFieldClick);
 		$(DOM.choosePlayerBox).find('button').on('click', handleChooseSign);
+		$(DOM.winnerBox).find('button').on('click', handleRestartGame);
 	}
 	
 	function init() {
