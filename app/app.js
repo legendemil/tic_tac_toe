@@ -96,10 +96,8 @@ var game = (function() {
 				fieldId 	= tempFieldId;
 				break;
 			}
-			else if(countUser === 2 && countPc === 0 && canWin === false) {
+			else if(countUser === 2 && countPc === 0 && canWin === false)
 				fieldId 	= tempFieldId;
-			}
-
 		}
 		return fieldId;
 	}
@@ -124,9 +122,6 @@ var game = (function() {
 	}
 
 	function startPcMove() {
-		// get a ranom number
-		// var id 			= Math.floor( Math.random() * fields.length );
-		// var fieldId 	= fields[id];
 		var id 			= Math.floor( Math.random() * fields.length );
 		var fieldId 	= pcLogicMove(fields[id]);
 		var query 		= '.table-field[data-field="' + fieldId + '"]';
