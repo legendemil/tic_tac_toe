@@ -1,7 +1,5 @@
 var game = (function() {
 	var fields 				= generateEmptyFields(),
-		userFields 			= [],
-		pcFields 			= [],
 		possibleWins 		= generatePossibleWins(),
 		whoIsActive 		= 'PC',
 		// x or o
@@ -110,12 +108,6 @@ var game = (function() {
 		whoIsActive = isUser ? 'USER' : 'PC';
 		if(!checkIsEmpty(fieldId)) 
 			return -1;
-		
-		// add to user or pc fields
-		if(isUser) 
-			userFields.push(fieldId);
-		else
-			pcFields.push(fieldId);
 
 		// remove from available fields
 		fields.splice(fields.indexOf(fieldId), 1);
