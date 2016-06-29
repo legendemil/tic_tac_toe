@@ -73,6 +73,39 @@ var game = (function() {
 		return false;
 	}
 
+	function pcLogicMove(randomFieldId) {
+		var fieldId = randomFieldId;
+		var canWin = false;
+
+		for(var i = 0, len = possibleWins.length; i < len; i++) {
+			var arr 			= possibleWins[i];
+			var countPc			= 0;
+			var countUser 		= 0;
+			var tempFieldId;
+
+			for(var j = 0; j < 3; j++) {
+				var value = arr[j];			
+				if(value === 'PC') 
+					countPc++;
+				else if(value === 'USER')
+					countUser++;
+				else if(checkIsEmpty(value))
+					tempFieldId = value;
+			}
+			
+			if(countPc === 2 && countUser === 0) {
+				canWin 		= true;
+				fieldId 	= tempFieldId;
+				break;
+			}
+			else if(countUser === 2 && countPc === 0 && canWin === false) {
+				fieldId 	= tempFieldId;
+			}
+
+		}
+		return fieldId;
+	}
+
 	function makeMove(fieldId, isUser) {
 		whoIsActive = isUser ? 'USER' : 'PC';
 		if(!checkIsEmpty(fieldId)) 
@@ -100,8 +133,10 @@ var game = (function() {
 
 	function startPcMove() {
 		// get a ranom number
+		// var id 			= Math.floor( Math.random() * fields.length );
+		// var fieldId 	= fields[id];
 		var id 			= Math.floor( Math.random() * fields.length );
-		var fieldId 	= fields[id];
+		var fieldId 	= pcLogicMove(fields[id]);
 		var query 		= '.table-field[data-field="' + fieldId + '"]';
 		var $field 		= DOM.table.find(query);
 		var moveResult;
